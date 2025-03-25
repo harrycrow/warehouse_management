@@ -18,3 +18,17 @@ def test_order_orm():
     order_orm=OrderORM(id=order.id, products=[product_orm])
     assert order_orm.id==order.id
     assert order_orm.products[0].id==product.id
+
+def save_and_retrieve_product():
+    engine=create_engine("sqlite://")
+    Base.metadata.create_all(engine)
+    Session=sessionmaker(bind=engine)
+    session=Session()
+    
+    product=Product(id=1, name="test_product", quantity=10, price=100)
+    product_orm=ProductORM(id=product.id, name=product.name, quantity=product.quantity, price=product.price)
+    session.add(product_orm)
+    session.commit()
+    retrieved_product=session.query(ProductORM).filter_by(id=product.id).one()
+    assert retrieved_product.id==product.id
+    assert retrieved_product.name==product.name
