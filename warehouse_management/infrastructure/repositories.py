@@ -30,7 +30,7 @@ class SqlAlchemyOrderRepository(OrderRepository):
 
     def add(self, order:Order):
         order_orm = OrderOrm()
-        order_orm.products= [self.session.query(ProductOrm).filter_by(id=p.id).one() fror p in order.products]
+        order_orm.products= [self.session.query(ProductOrm).filter_by(id=p.id).one() for p in order.products]
         self.session.add(order_orm)
 
     def get(self, order_id: int)->Order:
